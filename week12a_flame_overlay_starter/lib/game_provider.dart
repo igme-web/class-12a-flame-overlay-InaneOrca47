@@ -12,6 +12,10 @@ class GameProvider extends ChangeNotifier {
   AudioPlayer musicPlayer = AudioPlayer();
   AudioPlayer sfxPlayer = AudioPlayer();
 
+  final AudioContext audioContext = AudioContextConfig(
+    focus: AudioContextConfigFocus.mixWithOthers,
+  ).build();
+
   // Getters to access private variables
   double get musicVolume => _musicVolume;
   double get sfxVolume => _sfxVolume;
@@ -22,11 +26,13 @@ class GameProvider extends ChangeNotifier {
   // Setters with notifyListeners
   void setMusicVolume(double value) {
     _musicVolume = value;
+    musicPlayer.setVolume(_musicVolume); // Apply volume to player
     notifyListeners();
   }
 
   void setSfxVolume(double value) {
     _sfxVolume = value;
+    sfxPlayer.setVolume(_sfxVolume); // Apply volume to player
     notifyListeners();
   }
 
@@ -40,8 +46,13 @@ class GameProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Play background music
   Future<void> playBgm(String url) async {
+    // Set audio context to allow mixing
+    musicPlayer.setAudioContext(audioContext);
+
+    // Set to loop when finished
+    musicPlayer.setReleaseMode(ReleaseMode.loop);
+
     await musicPlayer.play(AssetSource(url));
   }
 

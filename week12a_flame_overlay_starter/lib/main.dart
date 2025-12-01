@@ -30,8 +30,8 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: GameWidget(
-          game: OverlayTutorial(context)..paused = true,
+        body: GameWidget.controlled(
+          gameFactory: () => OverlayTutorial(context)..paused = true,
           overlayBuilderMap: {
             'title': (context, game) {
               return OverlayTitle(game: game);
