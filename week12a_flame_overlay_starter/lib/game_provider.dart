@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flame/game.dart';
 
 class GameProvider extends ChangeNotifier {
   // Private variables for settings
@@ -8,6 +9,8 @@ class GameProvider extends ChangeNotifier {
   int _score = 0;
   int _lastScore = 0;
   bool _inGame = false;
+  FlameGame? _game;
+
   // Audio players
   AudioPlayer musicPlayer = AudioPlayer();
   AudioPlayer sfxPlayer = AudioPlayer();
@@ -22,6 +25,7 @@ class GameProvider extends ChangeNotifier {
   int get score => _score;
   int get lastScore => _lastScore;
   bool get inGame => _inGame;
+  FlameGame? get game => _game;
 
   // Setters with notifyListeners
   void setMusicVolume(double value) {
@@ -45,6 +49,11 @@ class GameProvider extends ChangeNotifier {
     _lastScore = value;
     notifyListeners();
   }
+
+  set game(FlameGame? value) {
+  _game = value;
+  // NO notifyListeners() here!
+}
 
   Future<void> playBgm(String url) async {
     // Set audio context to allow mixing
